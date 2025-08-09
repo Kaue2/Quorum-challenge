@@ -3,6 +3,7 @@ import { LegislatorsSummary } from '../../models/legislators-summary';
 import { BillsSummary } from '../../models/bills-summary';
 import { LegislatorsService } from '../../services/legislators/legislatorsService';
 import { BillsService } from '../../services/bills/billsService';
+import { UploadService } from '../../services/upload/upload';
 
 @Component({
   selector: 'app-home',
@@ -21,19 +22,23 @@ export class Home {
     'votes.csv': null
   }; 
 
-  constructor(private legislatorsService: LegislatorsService, private billsService: BillsService){}
+  constructor(
+    private legislatorsService: LegislatorsService,
+    private billsService: BillsService,
+    private uploadService: UploadService
+  ){}
 
   ngOnInit(){
     this.legislatorsService.get_legislators_summary().subscribe({
       next: (response) => {
         this.legislators_summary = response;
-        //console.log(this.legislators_summary);
+        console.log(this.legislators_summary);
       }
     });
     this.billsService.get_bills_summary().subscribe({
       next: (response) => {
         this.bills_summary = response;
-        //console.log(this.bills_summary);
+        console.log(this.bills_summary);
       }
     });
   }
@@ -72,5 +77,11 @@ export class Home {
     for(const key of Object.keys(this.selectedFiles)){
       formData.append(key.replace('.csv', ''), this.selectedFiles[key]!)
     }
+
+    this.uploadService.uploadFiles(formData).subscribe({
+      next: () => {
+        this.ngOnInit();
+      }
+    });
   }
 }

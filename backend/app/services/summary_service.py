@@ -1,13 +1,35 @@
 import pandas as pd
+from app.models.data_loader import DataLoader
 
 class SummaryService:
-    def __init__(self, data_loader):
-        self.legislators = data_loader.legislators
-        self.bills = data_loader.bills
-        self.votes = data_loader.votes
-        self.vote_results = data_loader.vote_results
+    _instance = None
+    _initialized = False
+    
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+    def __init__(self, data_loader=None):
+        # Evita reinicialização múltipla
+        if SummaryService._initialized:
+            return
+            
+        self.data_loader = data_loader or DataLoader()
+        self.refresh_data()
+        SummaryService._initialized = True
+    
+    def refresh_data(self):
+        self.legislators = self.data_loader.legislators
+        self.bills = self.data_loader.bills
+        self.votes = self.data_loader.votes
+        self.vote_results = self.data_loader.vote_results
     
     def get_legislators_summary(self):
+        if (self.legislators.empty or self.bills.empty or 
+            self.votes.empty or self.vote_results.empty):
+            return None 
+        
         vote_counts = (
             self.vote_results
             .groupby(["legislator_id", "vote_type"])
@@ -25,7 +47,11 @@ class SummaryService:
         
         return result[["legislator_id", "name", "supported", "opposed"]]
     
-    def get_bill_summary(self):  #
+    def get_bill_summary(self):
+        if (self.legislators.empty or self.bills.empty or 
+            self.votes.empty or self.vote_results.empty):
+            return None 
+        
         merged = self.vote_results.merge(
             self.votes, 
             left_on="vote_id",

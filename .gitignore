@@ -59,3 +59,6 @@ Thumbs.db
 # Arquivos temporários
 *.tmp
 *.temp
+*.csv
+*.ico
+QuorumWebApp/.editorconfig

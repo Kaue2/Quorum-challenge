@@ -15,7 +15,9 @@
                     <button style="padding: 1rem 1.5rem;" disabled>Confirm</button>
                 }
                 @else {
-                    <button style="padding: 1rem 1.5rem; background-color: #744FA9; border-radius: 6px; color: white;">Confirm</button>
+                    <button style="padding: 1rem 1.5rem; background-color: #744FA9; border-radius: 6px; color: white;"
+                    (click)="confirmUpload()">Confirm</button>
+                    
                 }
             </div>
         </div>
@@ -23,50 +25,58 @@
     <div class="main-content">
         <div style="display: flex; gap: 2rem;">
             <div class="list-container">
-                <h1>legislators ({{legislators_summary.length}})</h1>
-                @for (legislator of legislators_summary; track $index) {
-                    <div style="display: flex; flex-direction: column; padding: 2rem 2rem; border: 1px;
-                    border-style: solid; border-radius: 6px; gap: 2rem;">
-                        <div style="display: flex; justify-content: space-between; gap: 4rem;">
-                            <h3>{{legislator.name}}</h3>
-                            <h3>{{legislator.legislator_id}}</h3>
-                        </div>
-                        <div style="display: flex; gap: 2rem; flex: 1;;">
-                            <div style="padding: 1rem 1.5rem; border: 1px; border-style: solid; border-radius: 6px;">
-                                <h1 style="font-size: x-large;">{{legislator.supported}}</h1>
-                                <h3 style="font-size: medium; font-weight: 200;">SUPPORTED</h3>
+                @if(legislators_summary.length > 0){
+                    <h1>legislators ({{legislators_summary.length}})</h1>
+                    @for (legislator of legislators_summary; track $index) {
+                        <div style="display: flex; flex-direction: column; padding: 2rem 2rem; border: 1px;
+                        border-style: solid; border-radius: 6px; gap: 2rem;">
+                            <div style="display: flex; justify-content: space-between; gap: 4rem;">
+                                <h3>{{legislator.name}}</h3>
+                                <h3>{{legislator.legislator_id}}</h3>
                             </div>
-                            <div style="padding: 1rem 1.5rem; border: 1px; border-style: solid; border-radius: 6px;">
-                                <h1 style="font-size: x-large;">{{legislator.opposed}}</h1>
-                                <h3 style="font-size: medium; font-weight: 200;">OPPOSED</h3>
+                            <div style="display: flex; gap: 2rem; flex: 1;;">
+                                <div style="padding: 1rem 1.5rem; border: 1px; border-style: solid; border-radius: 6px;">
+                                    <h1 style="font-size: x-large;">{{legislator.supported}}</h1>
+                                    <h3 style="font-size: medium; font-weight: 200;">SUPPORTED</h3>
+                                </div>
+                                <div style="padding: 1rem 1.5rem; border: 1px; border-style: solid; border-radius: 6px;">
+                                    <h1 style="font-size: x-large;">{{legislator.opposed}}</h1>
+                                    <h3 style="font-size: medium; font-weight: 200;">OPPOSED</h3>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
+                } @else {
+                    <h1>no registered legislator</h1>
                 }
             </div>
             <div class="list-container">
-                <h1>Bills ({{bills_summary.length}})</h1>
-                @for (bills of bills_summary; track $index) {
-                    <div style="display: flex; flex-direction: column; padding: 2rem 2rem; border: 1px;
-                    border-style: solid; border-radius: 6px; gap: 2rem;">
-                        <div style="display: flex; justify-content: space-between; gap: 4rem;">
-                            <div>
-                                <h3>Primary Sponsor</h3>
-                                <h2>{{bills.primary_sponsor}}</h2>
+                @if(bills_summary.length){
+                    <h1>Bills ({{bills_summary.length}})</h1>
+                    @for (bills of bills_summary; track $index) {
+                        <div style="display: flex; flex-direction: column; padding: 2rem 2rem; border: 1px;
+                        border-style: solid; border-radius: 6px; gap: 2rem;">
+                            <div style="display: flex; justify-content: space-between; gap: 4rem;">
+                                <div>
+                                    <h3>Primary Sponsor</h3>
+                                    <h2>{{bills.primary_sponsor}}</h2>
+                                </div>
+                                <h3>{{bills.bill_id}}</h3>
                             </div>
-                            <h3>{{bills.bill_id}}</h3>
+                            <div style="display: flex; gap: 2rem; flex: 1;;">
+                                <div style="padding: 1rem 1.5rem; border: 1px; border-style: solid; border-radius: 6px;">
+                                    <h1 style="font-size: x-large;">{{bills.supporters}}</h1>
+                                    <h3 style="font-size: medium; font-weight: 200;">SUPPORTERS</h3>
+                                </div>
+                                <div style="padding: 1rem 1.5rem; border: 1px; border-style: solid; border-radius: 6px;">
+                                    <h1 style="font-size: x-large;">{{bills.opposers}}</h1>
+                                    <h3 style="font-size: medium; font-weight: 200;">OPPOSERS</h3>
+                                </div>
+                            </div>
                         </div>
-                        <div style="display: flex; gap: 2rem; flex: 1;;">
-                            <div style="padding: 1rem 1.5rem; border: 1px; border-style: solid; border-radius: 6px;">
-                                <h1 style="font-size: x-large;">{{bills.supporters}}</h1>
-                                <h3 style="font-size: medium; font-weight: 200;">SUPPORTERS</h3>
-                            </div>
-                            <div style="padding: 1rem 1.5rem; border: 1px; border-style: solid; border-radius: 6px;">
-                                <h1 style="font-size: x-large;">{{bills.opposers}}</h1>
-                                <h3 style="font-size: medium; font-weight: 200;">OPPOSERS</h3>
-                            </div>
-                        </div>
-                    </div>
+                    }
+                } @else {
+                    <h1>No registered bills</h1>
                 }
             </div>
         </div>
