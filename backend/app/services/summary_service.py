@@ -50,7 +50,7 @@ class SummaryService:
             suffixes=('', '_sponsor')
         )
         
-        bills_with_sponsor["name"] = bills_with_sponsor["name"].fillna("Patrocinador não encontrado")
+        bills_with_sponsor["name"] = bills_with_sponsor["name"].fillna("Sponsor not found")
         
         result = vote_counts.merge(
             bills_with_sponsor,
